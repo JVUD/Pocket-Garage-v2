@@ -1,39 +1,29 @@
 package com.example.pocketgaragenotlogin;
 
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.os.Bundle;
-
-import com.example.pocketgaragenotlogin.ui.gallery.GalleryFragment;
-
+import com.example.pocketgaragenotlogin.R;
 
 public class image_edit extends AppCompatActivity {
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    Button addcar;
+
+    private ImageView imageView;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_edit);
-        addcar = findViewById(R.id.addcar);
-        addcar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
+        imageView = findViewById(R.id.imageView);
 
-
-            }
-        });
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String imageUriString = extras.getString("imageUri");
+            Uri imageUri = Uri.parse(imageUriString);
+            imageView.setImageURI(imageUri);
+        }
     }
-
-
 }
