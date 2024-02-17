@@ -1,73 +1,79 @@
 package com.example.pocketgaragenotlogin.ui.home;
 
-import static androidx.camera.core.impl.UseCaseConfig.*;
-
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Rational;
-import android.util.Size;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.camera.core.CameraSelector;
-import androidx.camera.core.Preview;
-import androidx.camera.core.impl.PreviewConfig;
-import androidx.camera.core.impl.UseCaseConfig;
-import androidx.camera.core.impl.UseCaseConfig.Builder;
-import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.pocketgaragenotlogin.R;
 import com.example.pocketgaragenotlogin.databinding.FragmentHomeBinding;
-import com.example.pocketgaragenotlogin.image_edit;
-import com.google.common.util.concurrent.ListenableFuture;
-
-import java.util.concurrent.ExecutionException;
 
 public class HomeFragment extends Fragment {
 
+    private static final int CAMERA_PERMISSION_CODE = 101;
+    private static final int STORAGE_PERMISSION_CODE = 102;
     private FragmentHomeBinding binding;
-    Button edit;
+    private Button edit;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-    edit = root.findViewById(R.id.btnCapture);
-    edit.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(getActivity(), image_edit.class);
-            // If you need to pass data to the activity
+        edit = root.findViewById(R.id.btnCapture);
 
-            startActivity(intent);
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
         }
-    });
-        return root;
 
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent();
+            }
+        });
+        return root;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(requireContext().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, 0);
+        } else {
+            Toast.makeText(requireContext(), "Камера недоступна", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            // Вы можете использовать imageBitmap по вашему усмотрению
+        }
     }
 
+    @Override
     public void onDestroyView() {
-            super.onDestroyView();
-            binding = null;
-        }
-
+        super.onDestroyView();
+        binding = null;
+    }
 }
