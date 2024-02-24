@@ -2,6 +2,7 @@ package com.example.pocketgaragenotlogin.ui.home;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,6 +27,7 @@ import com.example.pocketgaragenotlogin.databinding.FragmentHomeBinding;
 import com.example.pocketgaragenotlogin.image_edit;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
@@ -35,7 +37,7 @@ public class HomeFragment extends Fragment {
 
     private static final int STORAGE_PERMISSION_CODE = 102;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private Uri imageUri;
+
 
 
     private Button captureButton;
@@ -68,20 +70,30 @@ public class HomeFragment extends Fragment {
 
     public void takePicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+        try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            // display error state to the user
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            // Convert Bitmap to Uri if needed
-            imageUri = getImageUri(getContext(), imageBitmap);
-            // Pass the Uri to the activity
-            ((image_edit) getActivity()).onPictureTaken(imageUri);
+            if(data != null) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+//                imageUri = getImageUri(getContext(), imageBitmap);
+//                imageUri = data.getData();
+                Intent nt = new Intent(getActivity(), image_edit.class);
+//                nt.setData(imageUri);
+                nt.putExtra("bitmap_image", imageBitmap);
+                startActivity(nt);
+            }
+            else {
+                Toast.makeText(requireContext(), "No data", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
