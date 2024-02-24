@@ -10,20 +10,19 @@ import com.example.pocketgaragenotlogin.R;
 
 public class image_edit extends AppCompatActivity {
 
-    private ImageView imageView;
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_edit);
 
-        imageView = findViewById(R.id.imageView);
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String imageUriString = extras.getString("imageUri");
-            Uri imageUri = Uri.parse(imageUriString);
-            imageView.setImageURI(imageUri);
-        }
+        // Your activity initialization code
     }
+
+    public void onPictureTaken(Uri imageUri) {
+        // Handle the imageUri in your activity
+        // For example, you can display the image in an ImageView
+        ImageView imageView = findViewById(R.id.imageView);
+        imageView.setImageURI(imageUri);
+    }
+
 }
