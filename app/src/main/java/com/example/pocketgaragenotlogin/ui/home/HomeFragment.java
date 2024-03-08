@@ -27,6 +27,9 @@ import com.example.pocketgaragenotlogin.databinding.FragmentHomeBinding;
 import com.example.pocketgaragenotlogin.image_edit;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
@@ -103,8 +106,39 @@ public class HomeFragment extends Fragment {
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
         return Uri.parse(path);
     }
-
-
+//
+//    private void saveImageToStorage(Bitmap bitmap) {
+//        // Save image to internal or external storage
+//        // Example: Save to internal storage
+//        String filename = "image.jpg";
+//        File file = new File(getFilesDir(), filename);
+//        try (FileOutputStream fos = new FileOutputStream(file)) {
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//
+//    }
+//
+//    // Copy image to assets folder (development only)
+//    private void copyImageToAssets(File file) {
+//        try {
+//            InputStream in = new FileInputStream(file);
+//            OutputStream out = getAssets().openFd("image.jpg").createOutputStream();
+//            byte[] buffer = new byte[1024];
+//            int read;
+//            while ((read = in.read(buffer)) != -1) {
+//                out.write(buffer, 0, read);
+//            }
+//            in.close();
+//            out.flush();
+//            out.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
