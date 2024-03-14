@@ -8,6 +8,7 @@
     <string name="action_settings">Settings</string>
     <string name="car">Toyota Camry</string>
     <string name="carGen">2rd gen</string>
+    <string name="user">Nickname</string>
     <string name="rating">rate 5.0</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
