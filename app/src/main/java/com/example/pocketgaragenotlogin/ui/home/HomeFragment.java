@@ -91,7 +91,7 @@ public class HomeFragment extends Fragment {
             if(data != null) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                saveImageToFolder(imageBitmap);
+
 //                imageUri = getImageUri(getContext(), imageBitmap);
 //                imageUri = data.getData();
                 Intent nt = new Intent(getActivity(), image_edit.class);
@@ -105,95 +105,12 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private Uri getImageUri(Context context, Bitmap bitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
-        return Uri.parse(path);
-    }private void saveImageToFolder(Bitmap bitmap) {
-        // Check if external storage is available
-        String state = Environment.getExternalStorageState();
-        if (!Environment.MEDIA_MOUNTED.equals(state)) {
-            Toast.makeText(requireContext(), "External storage not available", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Get the external storage directory
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Cars");
-        if (!storageDir.exists()) {
-            storageDir.mkdirs(); // Create the directory if it doesn't exist
-        }
-
-        try {
-            // Create a file to save the image
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-            File imageFile = new File(storageDir, "IMG_" + timeStamp + ".jpg");
-
-            // Write the bitmap data to the file
-            FileOutputStream fos = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.close();
-
-            // Notify the system that a new file has been created and is available for indexing
-            MediaScannerConnection.scanFile(requireContext(), new String[]{imageFile.getAbsolutePath()}, null,
-                    (path, uri) -> {
-                        // Image saved, display a toast or perform any other action
-                        Toast.makeText(requireContext(), "Image saved to folder", Toast.LENGTH_SHORT).show();
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(requireContext(), "Failed to save image", Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
-    private File createImageFile(File storageDir) throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
 
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
 
-        // Save a file: path for use with ACTION_VIEW intents
-        // mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-//    private void saveImageToStorage(Bitmap bitmap) {
-//        // Save image to internal or external storage
-//        // Example: Save to internal storage
-//        String filename = "image.jpg";
-//        File file = new File(getFilesDir(), filename);
-//        try (FileOutputStream fos = new FileOutputStream(file)) {
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//
-//    }
-//
-//    // Copy image to assets folder (development only)
-//    private void copyImageToAssets(File file) {
-//        try {
-//            InputStream in = new FileInputStream(file);
-//            OutputStream out = getAssets().openFd("image.jpg").createOutputStream();
-//            byte[] buffer = new byte[1024];
-//            int read;
-//            while ((read = in.read(buffer)) != -1) {
-//                out.write(buffer, 0, read);
-//            }
-//            in.close();
-//            out.flush();
-//            out.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
