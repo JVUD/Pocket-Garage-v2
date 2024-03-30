@@ -1,10 +1,22 @@
 package com.example.pocketgaragenotlogin;
 
+import static java.security.AccessController.getContext;
+
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.squareup.picasso.Picasso;
@@ -18,10 +30,16 @@ public class ImageDetailActivity extends AppCompatActivity {
     String imgPath;
     private ImageView imageView;
     private ScaleGestureDetector scaleGestureDetector;
+    Adapter adapter;
+
+    Button delete;
+    Button edit;
+    String imgName;
 
     // on below line we are defining our scale factor.
     private float mScaleFactor = 1.0f;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,10 +47,11 @@ public class ImageDetailActivity extends AppCompatActivity {
 
         // on below line getting data which we have passed from our adapter class.
         imgPath = getIntent().getStringExtra("imgPath");
-
+        imgName = getImageNameFromPath(imgPath);
         // initializing our image view.
         imageView = findViewById(R.id.idIVImage);
-
+        delete = findViewById(R.id.delete);
+        edit = findViewById(R.id.editD);
         // on below line we are initializing our scale gesture detector for zoom in and out for our image.
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
@@ -43,6 +62,20 @@ public class ImageDetailActivity extends AppCompatActivity {
         if (imgFile.exists()) {
             Picasso.get().load(imgFile).placeholder(R.drawable.ic_launcher_background).into(imageView);
         }
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteFileByPath(imgPath);
+                finish();
+            }
+        });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRenameImageDialog();
+            }
+        });
     }
 
     @Override
@@ -52,6 +85,73 @@ public class ImageDetailActivity extends AppCompatActivity {
         scaleGestureDetector.onTouchEvent(motionEvent);
         return true;
     }
+    // Inside your fragment class
+    // Inside your Fragment class
+    private boolean deleteFileByPath(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            return file.delete();
+
+        }
+        return false; // File doesn't exist or deletion failed
+    }
+
+    private String getImageNameFromPath(String imagePath) {
+        File file = new File(imagePath);
+        return file.getName();
+    }
+
+    private void showRenameImageDialog() {
+        LayoutInflater inflater = LayoutInflater.from(ImageDetailActivity.this);
+        View dialogView = inflater.inflate(R.layout.dialog_rename_image, null);
+
+        EditText editTextNewImageName = dialogView.findViewById(R.id.edit_text_new_image_name);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ImageDetailActivity.this);
+        builder.setView(dialogView)
+                .setTitle("Rename Image")
+                .setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newImageName = editTextNewImageName.getText().toString();
+                        // Perform renaming operation with newImageName
+                        renameImage(newImageName, imgPath);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    private void renameImage(String newImageName, String imgPath) {
+        File currentFile = new File("/storage/emulated/0/" + Environment.DIRECTORY_PICTURES + "/Cars/", getImageNameFromPath(imgPath));
+        File newFile = new File("/storage/emulated/0/" + Environment.DIRECTORY_PICTURES + "/Cars/", newImageName + ".jpg");
+
+        if (currentFile.exists()) {
+            if (currentFile.renameTo(newFile)) {
+                // File renamed successfully
+                // You may update any UI elements to reflect the new file name
+                Toast.makeText(this, "Image renamed successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                // Failed to rename file
+                // Handle error, such as showing a toast message
+                Toast.makeText(this, "Failed to rename image", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // File doesn't exist
+            // Handle error, such as showing a toast message
+            Toast.makeText(this, "Image file does not exist", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         // on below line we are creating a class for our scale

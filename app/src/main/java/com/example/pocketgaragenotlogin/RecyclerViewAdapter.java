@@ -2,11 +2,13 @@ package com.example.pocketgaragenotlogin;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +29,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.context = context;
         this.imagePathArrayList = imagePathArrayList;
     }
-
+    public void removeItem(int position) {
+        // Check if the position is valid
+        if (position >= 0 && position < imagePathArrayList.size()) {
+            // Remove the item from the list
+            imagePathArrayList.remove(position);
+            // Notify adapter of item removal
+            notifyItemRemoved(position);
+        }
+    }
+    public int getPositionByImageName(String imageName) {
+        for (int i = 0; i < imagePathArrayList.size(); i++) {
+            String imagePath = imagePathArrayList.get(i);
+            String fileName = new File(imagePath).getName();
+            if (fileName.equals(imageName)) {
+                return i;
+            }
+        }
+        return -1;
+    }
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,7 +61,42 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         // Get the file path at the current position
+        // Get the file path at the current position
         String filePath = imagePathArrayList.get(position);
+
+        // Extracting name, age, and rating from file name
+        String[] parts = filePath.split("_");
+        String dir = "/storage/emulated/0/" + Environment.DIRECTORY_PICTURES + "/Cars/";
+        if (parts.length >= 3) {
+
+            holder.nameTextView.setText(parts[0].replace(dir, ""));
+            holder.ageTextView.setText(parts[parts.length - 2]);
+            holder.ratingTextView.setText(parts[parts.length - 1].replace(".jpg", ""));
+        } else {
+            // Handling if the file name does not have enough parts
+            holder.nameTextView.setText("Name");
+            holder.ageTextView.setText("Age");
+            holder.ratingTextView.setText("Rating");
+        }
+
+        // Load the image using Picasso
+        Picasso.get()
+                .load(new File(filePath))
+                .placeholder(R.drawable.garage) // Placeholder image while loading
+                .error(R.drawable.plus) // Error image if loading fails
+                .into(holder.imageIV);
+
+        // Set click listener for the item
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle item click
+                Intent i = new Intent(context, ImageDetailActivity.class);
+                i.putExtra("imgPath", imagePathArrayList.get(position));
+                context.startActivity(i);
+            }
+        });
 
         // Log the file path for debugging
         Log.d("FilePathDebug", "File path at position " + position + ": " + filePath);
@@ -85,12 +140,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         // creating variables for our views.
+
         private final ImageView imageIV;
+        private final TextView nameTextView;
+        private final TextView ageTextView;
+        private final TextView ratingTextView;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-            // initializing our views with their ids.
             imageIV = itemView.findViewById(R.id.idIVImage);
+            nameTextView = itemView.findViewById(R.id.Name);
+            ageTextView = itemView.findViewById(R.id.GenName);
+            ratingTextView = itemView.findViewById(R.id.Rate);
         }
     }
+
 }

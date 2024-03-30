@@ -36,6 +36,16 @@ dependencies {
 
 
 
+    // The following line is optional, as the core library is included indirectly by camera-camera2
+    implementation("androidx.camera:camera-core:1.1.0-alpha08")
+    implementation("androidx.camera:camera-camera2:1.1.0-alpha08")
+    // If you want to additionally use the CameraX Lifecycle library
+    implementation("androidx.camera:camera-lifecycle:1.1.0-alpha08")
+    // If you want to additionally use the CameraX View class
+    implementation("androidx.camera:camera-view:1.0.0-alpha14")
+    // If you want to additionally use the CameraX Extensions library
+    implementation("androidx.camera:camera-extensions:1.0.0-alpha14")
+
     implementation("androidx.camera:camera-core:1.2.2")
     implementation("androidx.camera:camera-camera2:1.2.2")
     implementation("androidx.camera:camera-lifecycle:1.2.2")
@@ -54,6 +64,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation("androidx.activity:activity:1.8.0")
+    implementation("androidx.preference:preference:1.2.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

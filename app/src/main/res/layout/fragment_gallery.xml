@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
@@ -8,6 +8,12 @@ android:layout_gravity="center"
 android:gravity="center"
 android:orientation="vertical"
 tools:context=".ui.gallery.GalleryFragment">
+    <Button
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="refresh"
+        android:textColor="@color/white"/>
 
 <!--recycler view for displaying the list of images-->
 <androidx.recyclerview.widget.RecyclerView
@@ -15,4 +21,4 @@ tools:context=".ui.gallery.GalleryFragment">
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 
-</RelativeLayout>
+</LinearLayout>

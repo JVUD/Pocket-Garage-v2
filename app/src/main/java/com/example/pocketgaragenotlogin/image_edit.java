@@ -52,8 +52,9 @@ public class image_edit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_edit);
         Intent intent = getIntent();
-        bitmap = intent.getParcelableExtra("bitmap_image");
+        bitmap = intent.getParcelableExtra("bitmap");
         onPictureTaken(bitmap);
+        getSupportActionBar().setTitle("Add new car");
 
         button = findViewById(R.id.addcar);
         model_et = findViewById(R.id.model);
@@ -78,6 +79,7 @@ public class image_edit extends AppCompatActivity {
                 }
                 String name = model_text + "_" + gen_text + "_" + String.valueOf(rating_val);
                 saveImageToFolder(bitmap, name);
+                finish();
 //                item_model im = new item_model(model_text, gen_text, rating_val, bitmap);
 //                DatabaseReference usersRef = firebaseDatabase.getReference().child("auto");
 //                usersRef.setValue(im);

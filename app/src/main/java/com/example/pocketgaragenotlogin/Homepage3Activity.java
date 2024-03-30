@@ -1,6 +1,8 @@
 package com.example.pocketgaragenotlogin;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 
@@ -20,6 +22,7 @@ public class Homepage3Activity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomepage3Binding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,19 @@ public class Homepage3Activity extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.homepage3, menu);
         return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            // Handle settings menu item click
+            startActivity(new Intent(this, SettingsActivity.class)); // Start SettingsActivity
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
