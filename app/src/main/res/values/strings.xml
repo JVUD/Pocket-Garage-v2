@@ -17,6 +17,182 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
+    <string-array name="Car_Models">
+        <item>Toyota</item>
+        <item>Honda</item>
+        <item>Ford</item>
+        <item>Chevrolet</item>
+        <item>BMW</item>
+        <item>Audi</item>
+        <item>Mercedes-Benz</item>
+        <item>Volkswagen</item>
+        <item>Hyundai</item>
+        <item>Nissan</item>
+    </string-array>
+
+
+    <string-array name="Toyota">
+        <item>Camry</item>
+        <item>Corolla</item>
+        <item>Rav4</item>
+        <item>Highlander</item>
+        <item>Sienna</item>
+        <item>Prius</item>
+        <item>4Runner</item>
+        <item>Tacoma</item>
+        <item>Tundra</item>
+        <item>Yaris</item>
+        <item>Avalon</item>
+        <item>C-HR</item>
+        <item>Supra</item>
+        <item>Sequoia</item>
+        <item>Mirai</item>
+        <item>Land Cruiser</item>
+        <item>Corolla Cross</item>
+        <item>Venza</item>
+        <item>GR86</item>
+        <item>GR Supra</item>
+        <item>GR Yaris</item>
+    </string-array>
+    <string-array name="Honda">
+        <item>Accord</item>
+        <item>Civic</item>
+        <item>CR-V</item>
+        <item>Pilot</item>
+        <item>Odyssey</item>
+        <item>HR-V</item>
+        <item>Fit</item>
+        <item>Ridgeline</item>
+        <item>Insight</item>
+        <item>Passport</item>
+    </string-array>
+    <string-array name="Ford">
+        <item>Focus</item>
+        <item>Fusion</item>
+        <item>Escape</item>
+        <item>Explorer</item>
+        <item>Edge</item>
+        <item>Mustang</item>
+        <item>F-150</item>
+        <item>Ranger</item>
+        <item>Expedition</item>
+        <item>EcoSport</item>
+    </string-array>
+
+    <string-array name="Chevrolet">
+        <item>Spark</item>
+        <item>Sonic</item>
+        <item>Cruze</item>
+        <item>Malibu</item>
+        <item>Impala</item>
+        <item>Trax</item>
+        <item>Equinox</item>
+        <item>Blazer</item>
+        <item>Traverse</item>
+        <item>Tahoe</item>
+        <item>Suburban</item>
+        <item>Camaro</item>
+        <item>Corvette</item>
+        <item>Colorado</item>
+        <item>Silverado</item>
+    </string-array>
+    <string-array name="BMW">
+        <item>3 Series</item>
+        <item>5 Series</item>
+        <item>7 Series</item>
+        <item>X1</item>
+        <item>X3</item>
+        <item>X5</item>
+        <item>X7</item>
+        <item>Z4</item>
+        <item>i3</item>
+        <item>i8</item>
+    </string-array>
+    <string-array name="Audi">
+        <item>A3</item>
+        <item>A4</item>
+        <item>A5</item>
+        <item>A6</item>
+        <item>A7</item>
+        <item>A8</item>
+        <item>Q3</item>
+        <item>Q5</item>
+        <item>Q7</item>
+        <item>Q8</item>
+        <item>TT</item>
+        <item>R8</item>
+        <item>RS3</item>
+        <item>RS4</item>
+        <item>RS5</item>
+        <item>RS6</item>
+        <item>RS7</item>
+    </string-array>
+    <string-array name="MercedesBenz">
+        <item>A-Class</item>
+        <item>C-Class</item>
+        <item>E-Class</item>
+        <item>S-Class</item>
+        <item>CLA</item>
+        <item>CLS</item>
+        <item>GLA</item>
+        <item>GLB</item>
+        <item>GLC</item>
+        <item>GLE</item>
+        <item>GLS</item>
+        <item>G-Class</item>
+        <item>SLC</item>
+        <item>SL</item>
+        <item>AMG GT</item>
+        <item>EQC</item>
+    </string-array>
+    <string-array name="Volkswagen">
+        <item>Polo</item>
+        <item>Golf</item>
+        <item>Passat</item>
+        <item>Jetta</item>
+        <item>Arteon</item>
+        <item>Tiguan</item>
+        <item>Atlas</item>
+        <item>Touareg</item>
+        <item>Up!</item>
+        <item>Beetle</item>
+        <item>Scirocco</item>
+        <item>CC</item>
+        <item>Electric ID.3</item>
+        <item>Electric ID.4</item>
+    </string-array>
+    <string-array name="Hyundai">
+        <item>Accent</item>
+        <item>Elantra</item>
+        <item>Sonata</item>
+        <item>Veloster</item>
+        <item>IONIQ</item>
+        <item>Kona</item>
+        <item>Tucson</item>
+        <item>Santa Fe</item>
+        <item>Palisade</item>
+        <item>Genesis</item>
+    </string-array>
+    <string-array name="Nissan">
+        <item>Altima</item>
+        <item>Maxima</item>
+        <item>Sentra</item>
+        <item>Versa</item>
+        <item>370Z</item>
+        <item>GT-R</item>
+        <item>Rogue</item>
+        <item>Murano</item>
+        <item>Pathfinder</item>
+        <item>Armada</item>
+        <item>Titan</item>
+        <item>Frontier</item>
+        <item>Kicks</item>
+        <item>Juke</item>
+        <item>Leaf</item>
+        <item>NV</item>
+    </string-array>
+
+
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>

@@ -61,6 +61,13 @@ public class Homepage3Activity extends AppCompatActivity {
 
             return true;
         }
+        else if (id == R.id.action_logout) {
+            // Handle log out menu item click
+//            FirebaseAuth.getInstance().signOut(); // Sign out the current user
+            startActivity(new Intent(this, Login.class)); // Navigate to the login activity
+            finish(); // Close the current activity
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

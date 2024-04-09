@@ -50,6 +50,8 @@ public class GalleryFragment extends Fragment {
     Button refresh;
 
 
+
+
     // Initialize GestureDetector
 
     private int PICK_PDF_REQUEST = 124;
@@ -81,6 +83,7 @@ public class GalleryFragment extends Fragment {
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
             }
         });

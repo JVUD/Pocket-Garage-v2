@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
@@ -35,6 +36,9 @@ public class ImageDetailActivity extends AppCompatActivity {
     Button delete;
     Button edit;
     String imgName;
+
+    private RecyclerView imagesRV;
+    private RecyclerViewAdapter imageRVAdapter;
 
     // on below line we are defining our scale factor.
     private float mScaleFactor = 1.0f;
@@ -66,6 +70,7 @@ public class ImageDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 deleteFileByPath(imgPath);
+                imageRVAdapter.removeItem(imageRVAdapter.getPositionByImageName(imgName));
                 finish();
             }
         });

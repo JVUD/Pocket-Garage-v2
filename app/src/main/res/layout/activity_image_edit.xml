@@ -22,37 +22,30 @@
 
 
          />
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginHorizontal="10dp"
-
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/model"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:hint="Model"
-            android:textSize="20dp"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="5dp"
-
-
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/gen"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:hint="Genaration"
-            android:textSize="20dp"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        android:text="Car"
+        android:textSize="30dp"/>
+    <Spinner
+        android:id="@+id/spinnerModel"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginHorizontal="10dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="Model"
+        android:textSize="30dp"/>
+    <Spinner
+        android:id="@+id/spinnerGen"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginHorizontal="10dp"
+        />
 
     <RatingBar
         android:id="@+id/ratingBar"

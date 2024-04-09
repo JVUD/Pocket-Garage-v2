@@ -10,10 +10,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,10 +45,12 @@ public class image_edit extends AppCompatActivity {
     Uri uri;
     Bitmap bitmap;
     Button button;
-//    FirebaseAuth mAuth;
-//    FirebaseDatabase firebaseDatabase;
-    EditText model_et, gen_et;
+    String model;
+    String mark;
+
     RatingBar ratingBar;
+    Boolean isSelected;
+
     HomeFragment homeFragment = new HomeFragment();
 
     @Override
@@ -55,10 +61,78 @@ public class image_edit extends AppCompatActivity {
         bitmap = intent.getParcelableExtra("bitmap");
         onPictureTaken(bitmap);
         getSupportActionBar().setTitle("Add new car");
+        Spinner spinnerModel = findViewById(R.id.spinnerModel);
+        ArrayAdapter<CharSequence> models = ArrayAdapter.createFromResource(this, R.array.Car_Models, android.R.layout.simple_spinner_item);
+        models.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerModel.setAdapter(models);
+        Spinner spinnerGen = findViewById(R.id.spinnerGen);
 
         button = findViewById(R.id.addcar);
-        model_et = findViewById(R.id.model);
-        gen_et = findViewById(R.id.gen);
+        spinnerModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mark = parent.getItemAtPosition(position).toString();
+                
+                ArrayAdapter<CharSequence> gen = new ArrayAdapter<>(image_edit.this, android.R.layout.simple_spinner_item); // Initialize to a default ArrayAdapter
+                if(mark.equals("Toyota")) {
+                    gen = ArrayAdapter.createFromResource(image_edit.this, R.array.Toyota, android.R.layout.simple_spinner_item);
+                }
+                else if(mark.equals("Honda")) {
+                    gen = ArrayAdapter.createFromResource(image_edit.this, R.array.Honda, android.R.layout.simple_spinner_item);
+                }
+                else if(mark.equals("Ford")) {
+                    gen = ArrayAdapter.createFromResource(image_edit.this, R.array.Ford, android.R.layout.simple_spinner_item);
+                }
+                else if(mark.equals("Chevrolet")) {
+                    gen = ArrayAdapter.createFromResource(image_edit.this, R.array.Chevrolet, android.R.layout.simple_spinner_item);
+                }else if(mark.equals("BMW")) {
+                    gen = ArrayAdapter.createFromResource(image_edit.this, R.array.BMW, android.R.layout.simple_spinner_item);
+                }
+                else if(mark.equals("Audi")) {
+                    gen = ArrayAdapter.createFromResource(image_edit.this, R.array.Audi, android.R.layout.simple_spinner_item);
+                }
+                else if(mark.equals("Mercedes-Benz")) {
+                    gen = ArrayAdapter.createFromResource(image_edit.this, R.array.MercedesBenz, android.R.layout.simple_spinner_item);
+                }
+                else if(mark.equals("Volkswagen")) {
+                    gen = ArrayAdapter.createFromResource(image_edit.this, R.array.Volkswagen, android.R.layout.simple_spinner_item);
+                }
+                else if(mark.equals("Hyundai")) {
+                    gen = ArrayAdapter.createFromResource(image_edit.this, R.array.Hyundai, android.R.layout.simple_spinner_item);
+                }
+                else if(mark.equals("Nissan")) {
+                    gen = ArrayAdapter.createFromResource(image_edit.this, R.array.Volkswagen, android.R.layout.simple_spinner_item);
+                }
+
+
+                // Add other conditions for other car brands here...
+
+                gen.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // Set drop-down view resource
+                spinnerGen.setAdapter(gen);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                isSelected = false;
+            }
+        });
+        spinnerGen.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                model = parent.getItemAtPosition(position).toString();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                isSelected = false;
+            }
+        });
+
+
+
+
         ratingBar = findViewById(R.id.ratingBar);
 
 //        mAuth = FirebaseAuth.getInstance();
@@ -67,16 +141,10 @@ public class image_edit extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
                 @Override
             public void onClick(View v) {
-                String model_text = String.valueOf(model_et.getText()), gen_text = String.valueOf(gen_et.getText());
+                String model_text = mark;
+                String gen_text = model;
                 Float rating_val = ratingBar.getRating();
-                if (model_text.isEmpty()){
-                    Toast.makeText(getApplicationContext(), "No Model name entered", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (gen_text.isEmpty()){
-                    Toast.makeText(getApplicationContext(), "No Gen entered", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+
                 String name = model_text + "_" + gen_text + "_" + String.valueOf(rating_val);
                 saveImageToFolder(bitmap, name);
                 finish();
