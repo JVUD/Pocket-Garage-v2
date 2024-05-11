@@ -12,9 +12,6 @@
             android:id="@+id/nav_gallery"
             android:icon="@drawable/garage"
             android:title="Garage" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/friends"
-            android:title="Friends" />
+
     </group>
 </menu>

@@ -1,14 +1,20 @@
 package com.example.pocketgaragenotlogin;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,13 +23,22 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pocketgaragenotlogin.databinding.ActivityHomepage3Binding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Homepage3Activity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomepage3Binding binding;
-
-
+    private FirebaseAuth mAuth;
+    private TextView textViewUserName;
+    private TextView textViewUserEmail;
+    private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,16 +50,59 @@ public class Homepage3Activity extends AppCompatActivity {
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+        // Check if permission is not granted
+
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_gallery)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_homepage3);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-    }
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            startActivity(new Intent(Homepage3Activity.this, Login.class));
+        }
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        NavigationView navigationView1 = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        textViewUserName = headerView.findViewById(R.id.Name);
+        textViewUserEmail = headerView.findViewById(R.id.Email);
 
+        updateNavigationHeader();
+    }
+    private void updateNavigationHeader() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            mDatabase.child("users");
+            mDatabase.child(userId);
+            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Log.e("MainActivity", "DataSnapshot: " + dataSnapshot.toString());
+                    if (dataSnapshot.exists()) {
+                        String userName = dataSnapshot.child("username").getValue(String.class);
+                        Log.e("MainActivity", "User Name: " + userName);
+                        Log.e("MainActivity", "onDataChange: " + userName);
+                        String userEmail = currentUser.getEmail();
+                        textViewUserName.setText(userName);
+                        textViewUserEmail.setText(userEmail);
+                    } else {
+                        Log.e("MainActivity", "User data does not exist");
+                    }
+                }
+
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle database error
+                }
+            });
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 

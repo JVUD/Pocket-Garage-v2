@@ -39,6 +39,7 @@ dependencies {
     // The following line is optional, as the core library is included indirectly by camera-camera2
     implementation("androidx.camera:camera-core:1.1.0-alpha08")
     implementation("androidx.camera:camera-camera2:1.1.0-alpha08")
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     // If you want to additionally use the CameraX Lifecycle library
     implementation("androidx.camera:camera-lifecycle:1.1.0-alpha08")
     // If you want to additionally use the CameraX View class

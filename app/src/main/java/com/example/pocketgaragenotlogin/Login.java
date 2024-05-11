@@ -1,52 +1,62 @@
 package com.example.pocketgaragenotlogin;
 
-import static com.google.android.material.internal.ContextUtils.getActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
-import com.example.pocketgaragenotlogin.ui.home.HomeFragment;
+import com.example.pocketgaragenotlogin.databinding.ActivityLoginBinding;
 
 public class Login extends AppCompatActivity {
-    TextView signUp;
-    Button logIn;
-    @SuppressLint("WrongViewCast")
+
+
+    private ActivityLoginBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login);
-        this.getSupportActionBar().hide();
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        logIn = findViewById(R.id.sign_in);
-        logIn.setOnClickListener(new View.OnClickListener() {
+        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create instance of your Fragment
-               Intent intent = new Intent(Login.this, Homepage3Activity.class);
-               startActivity(intent);
-               finish();
+                if (binding.emailEt.getText().toString().isEmpty() || binding.passwordEt.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Fields cannot be empty", Toast.LENGTH_SHORT).show();
+                }else{
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(binding.emailEt.getText().toString(), binding.passwordEt.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()){
+                                        startActivity(new Intent(Login.this, Homepage3Activity.class));
+                                    }
+                                    else{
+                                        Toast.makeText(Login.this, "Wrong data", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
             }
         });
-        signUp = findViewById(R.id.sign_up);
-        signUp.setOnClickListener(new View.OnClickListener() {
+
+        binding.goToRegisterActivityTv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Login.this, Register.class);
-                startActivity(intent);
-                finish();
+            public void onClick(View v) {
+                startActivity(new Intent(Login.this, Register.class));
             }
-       });
+        });
     }
 }

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "25355812730",
+    "firebase_url": "https://pocket-garage-47a52-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "pocket-garage-47a52",
+    "storage_bucket": "pocket-garage-47a52.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25355812730:android:7935b6549354defbe4e0c3",
+        "android_client_info": {
+          "package_name": "com.example.pocketgaragenotlogin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBShInO1GwhnxaOGgc43jHflFj24IYanvk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

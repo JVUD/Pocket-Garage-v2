@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.pocketgaragenotlogin" />
-                  <option name="mobileSdkAppId" value="1:1071084330545:android:c3f2d6f97a5ea701ebbf10" />
-                  <option name="projectId" value="pocket-garage-11551" />
-                  <option name="projectNumber" value="1071084330545" />
+                  <option name="mobileSdkAppId" value="1:25355812730:android:7935b6549354defbe4e0c3" />
+                  <option name="projectId" value="pocket-garage-47a52" />
+                  <option name="projectNumber" value="25355812730" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
