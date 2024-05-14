@@ -36,7 +36,11 @@ public class Register extends AppCompatActivity {
                     if (binding.emailEt.getText().toString().isEmpty() || binding.passwordEt.getText().toString().isEmpty()
                             || binding.usernameEt.getText().toString().isEmpty()){
                         Toast.makeText(getApplicationContext(), "Fields cannot be empty", Toast.LENGTH_SHORT).show();
-                    }else{
+                    }
+                    if (!binding.rpassword.getText().toString().equals(binding.passwordEt.getText().toString())){
+                        Toast.makeText(Register.this, "Make sure you wrote your password again", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
                         FirebaseAuth.getInstance().createUserWithEmailAndPassword(binding.emailEt.getText().toString(), binding.passwordEt.getText().toString())
                                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override

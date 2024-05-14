@@ -14,13 +14,15 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="25dp"
+        android:textAlignment="center"
         android:textColor="@color/blue"
         android:text="Welcome back"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Log In!"
+        android:text="Log In"
+        android:textAlignment="center"
         android:textSize="50dp"
         android:textStyle="bold"
         android:textColor="@color/blue"/>
@@ -82,7 +84,35 @@
             android:textStyle="bold"
             android:textSize="15dp"
             android:textColor="@color/blue"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="7dp"/>
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:text="Or"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
 
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log in as!"
+            android:textSize="15dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/logInAsGuest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guest"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="@color/blue"
+            android:layout_marginLeft="7dp"/>
+    </LinearLayout>
 </LinearLayout>

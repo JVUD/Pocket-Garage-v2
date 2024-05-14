@@ -64,7 +64,7 @@ public class Homepage3Activity extends AppCompatActivity {
             startActivity(new Intent(Homepage3Activity.this, Login.class));
         }
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         NavigationView navigationView1 = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         textViewUserName = headerView.findViewById(R.id.Name);
@@ -77,28 +77,27 @@ public class Homepage3Activity extends AppCompatActivity {
         if (currentUser != null) {
             String userId = currentUser.getUid();
 
-            mDatabase.child("users");
-            mDatabase.child(userId);
-            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+            FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid()).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.e("MainActivity", "DataSnapshot: " + dataSnapshot.toString());
+                public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        String userName = dataSnapshot.child("username").getValue(String.class);
-                        Log.e("MainActivity", "User Name: " + userName);
-                        Log.e("MainActivity", "onDataChange: " + userName);
-                        String userEmail = currentUser.getEmail();
-                        textViewUserName.setText(userName);
-                        textViewUserEmail.setText(userEmail);
-                    } else {
-                        Log.e("MainActivity", "User data does not exist");
+                        String username = dataSnapshot.getValue(String.class);
+                        String useremail = currentUser.getEmail().toString();
+                        textViewUserName.setText(username);
+                        textViewUserEmail.setText(useremail);
+                    }
+                    else {
+                        textViewUserEmail.setText("No mail");
+                        textViewUserName.setText("No name");
+
                     }
                 }
 
-
                 @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Handle database error
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle errors
                 }
             });
         }
