@@ -2,6 +2,7 @@ package com.example.pocketgaragenotlogin;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,130 +18,82 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
-
-    // creating a variable for our context and array list.
     private final Context context;
     private final ArrayList<String> imagePathArrayList;
 
-    // on below line we have created a constructor.
     public RecyclerViewAdapter(Context context, ArrayList<String> imagePathArrayList) {
         this.context = context;
         this.imagePathArrayList = imagePathArrayList;
     }
-    public void removeItem(int position) {
-        // Check if the position is valid
-        if (position >= 0 && position < imagePathArrayList.size()) {
-            // Remove the item from the list
-            imagePathArrayList.remove(position);
-            // Notify adapter of item removal
-            notifyItemRemoved(position);
-        }
-    }
-    public int getPositionByImageName(String imageName) {
-        for (int i = 0; i < imagePathArrayList.size(); i++) {
-            String imagePath = imagePathArrayList.get(i);
-            String fileName = new File(imagePath).getName();
-            if (fileName.equals(imageName)) {
-                return i;
-            }
-        }
-        return -1;
-    }
+
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate Layout in this method which we have created.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
         return new RecyclerViewHolder(view);
     }
 
-
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
+        String imageUrl = imagePathArrayList.get(position);
 
-        // Get the file path at the current position
-        // Get the file path at the current position
-        String filePath = imagePathArrayList.get(position);
 
-        // Extracting name, age, and rating from file name
-        String[] parts = filePath.split("_");
-        String dir = "/storage/emulated/0/" + Environment.DIRECTORY_PICTURES + "/Cars/";
-        if (parts.length >= 3) {
+        String fileName = Uri.parse(imageUrl).getLastPathSegment();
+        Log.e("Gallery", "imgname: " + fileName);
 
-            holder.nameTextView.setText(parts[0].replace(dir, ""));
-            holder.ageTextView.setText(parts[parts.length - 2]);
-            holder.ratingTextView.setText(parts[parts.length - 1].replace(".jpg", ""));
+        if (fileName != null) {
+            String[] carDetails = extractCarDetails(fileName);
+            if (carDetails != null) {
+                holder.nameTextView.setText(carDetails[0]);
+                holder.ageTextView.setText(carDetails[1]);
+                holder.ratingTextView.setText(carDetails[2]);
+            } else {
+                holder.nameTextView.setText("Unknown");
+                holder.ageTextView.setText("Unknown");
+                holder.ratingTextView.setText("Unknown");
+            }
         } else {
-            // Handling if the file name does not have enough parts
-            holder.nameTextView.setText("Name");
-            holder.ageTextView.setText("Age");
-            holder.ratingTextView.setText("Rating");
+            Log.e("RecyclerViewAdapter", "Invalid file name: " + imageUrl);
         }
 
         // Load the image using Picasso
         Picasso.get()
-                .load(new File(filePath))
+                .load(imageUrl)
                 .placeholder(R.drawable.garage) // Placeholder image while loading
                 .error(R.drawable.plus) // Error image if loading fails
                 .into(holder.imageIV);
 
-        // Set click listener for the item
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle item click
-                Intent i = new Intent(context, ImageDetailActivity.class);
-                i.putExtra("imgPath", imagePathArrayList.get(position));
-                context.startActivity(i);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ImageDetailActivity.class);
+            intent.putExtra("imgPath", imageUrl);
+            context.startActivity(intent);
         });
-
-        // Log the file path for debugging
-        Log.d("FilePathDebug", "File path at position " + position + ": " + filePath);
-
-        // Check if the file exists at the specified path
-        File imgFile = new File(filePath);
-        if (imgFile.exists()) {
-            // Load the image using Picasso
-            Picasso.get()
-                    .load(imgFile)
-                    .placeholder(R.drawable.garage) // Placeholder image while loading
-                    .error(R.drawable.plus) // Error image if loading fails
-                    .into(holder.imageIV);
-
-            // Set click listener for the item
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Handle item click
-                    Intent i = new Intent(context, ImageDetailActivity.class);
-                    i.putExtra("imgPath", imagePathArrayList.get(position));
-                    context.startActivity(i);
-                }
-            });
-        } else {
-            // Log an error if the file does not exist
-            Log.e("FilePathDebug", "File does not exist at path: " + filePath);
-        }
     }
+    private static String[] extractCarDetails(String input) {
+        // Regex pattern to extract car details
+        String regex = "\\[(\\w+)_(\\w+)_(\\d+\\.\\d+)\\.jpg\\]";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
 
-
-
+        if (matcher.find()) {
+            // Extracted details from the input string
+            String make = matcher.group(1);
+            String model = matcher.group(2);
+            String version = matcher.group(3);
+            return new String[] { make, model, version };
+        }
+        return null;
+    }
     @Override
     public int getItemCount() {
-        // this method returns
-        // the size of recyclerview
         return imagePathArrayList.size();
     }
 
-    // View Holder Class to handle Recycler View.
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
-        // creating variables for our views.
-
         private final ImageView imageIV;
         private final TextView nameTextView;
         private final TextView ageTextView;
@@ -154,5 +107,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             ratingTextView = itemView.findViewById(R.id.Rate);
         }
     }
-
 }
+
+

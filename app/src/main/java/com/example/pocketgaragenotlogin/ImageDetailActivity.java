@@ -1,8 +1,7 @@
 package com.example.pocketgaragenotlogin;
 
-import static java.security.AccessController.getContext;
-
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,11 +15,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 
@@ -60,17 +64,17 @@ public class ImageDetailActivity extends AppCompatActivity {
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
         // on below line we are getting our image file from its path.
-        File imgFile = new File(imgPath);
-
+        Glide.with(this)
+                .load(imgPath)
+                .placeholder(R.drawable.profile)
+                .into(imageView);
         // if the file exists then we are loading that image in our image view.
-        if (imgFile.exists()) {
-            Picasso.get().load(imgFile).placeholder(R.drawable.ic_launcher_background).into(imageView);
-        }
+
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteFileByPath(imgPath);
-                imageRVAdapter.removeItem(imageRVAdapter.getPositionByImageName(imgName));
+                deleteImage();
+
                 finish();
             }
         });
@@ -100,7 +104,25 @@ public class ImageDetailActivity extends AppCompatActivity {
         }
         return false; // File doesn't exist or deletion failed
     }
+    private void deleteImage() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl(imgPath);
 
+        storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(ImageDetailActivity.this, "Image deleted successfully", Toast.LENGTH_SHORT).show();
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Failed to delete the file
+                Toast.makeText(ImageDetailActivity.this, "Failed to delete image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private String getImageNameFromPath(String imagePath) {
         File file = new File(imagePath);
         return file.getName();

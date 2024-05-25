@@ -58,5 +58,22 @@ public class Login extends AppCompatActivity {
                 startActivity(new Intent(Login.this, Register.class));
             }
         });
+        binding.logInAsGuest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword("sictst1@gmail.com", "Samsung2023")
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()){
+                                    startActivity(new Intent(Login.this, Homepage3Activity.class));
+                                }
+                                else{
+                                    Toast.makeText(Login.this, "Wrong data", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
     }
 }

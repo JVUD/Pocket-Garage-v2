@@ -1,23 +1,15 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory app:title="VHS Filter">
 
         <SwitchPreferenceCompat
             app:key="sync"
-            app:title="Shows notifications" />
+            app:title="Add VHS Filter" />
 
         
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Profile">
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="Public" />
-
-
-
-    </PreferenceCategory>
 
 </PreferenceScreen>

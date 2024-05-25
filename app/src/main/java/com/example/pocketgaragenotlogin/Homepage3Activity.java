@@ -39,6 +39,7 @@ public class Homepage3Activity extends AppCompatActivity {
     private TextView textViewUserName;
     private TextView textViewUserEmail;
     private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +65,7 @@ public class Homepage3Activity extends AppCompatActivity {
             startActivity(new Intent(Homepage3Activity.this, Login.class));
         }
         mAuth = FirebaseAuth.getInstance();
-
+        Log.e("HomePage", "onCreate:"+ FirebaseAuth.getInstance().getCurrentUser());
         NavigationView navigationView1 = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         textViewUserName = headerView.findViewById(R.id.Name);
